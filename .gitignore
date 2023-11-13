@@ -1,0 +1,3 @@
+data/*.csv
+data/CA_Counties/CA_Counties_TIGER*
+flu_region/*.csv
