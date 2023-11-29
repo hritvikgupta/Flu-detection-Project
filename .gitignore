@@ -1,3 +1,8 @@
 data/*.csv
 data/CA_Counties/CA_Counties_TIGER*
 flu_region/*.csv
+flu_region/*/*.csv
+flu_region/pred_maps/
+frontend/flask/static/fluRegionMaps/pred_maps
+frontend/flask/static/fluRegionMaps/maps
+frontend/djangoNightmare
