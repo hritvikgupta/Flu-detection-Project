@@ -13,3 +13,5 @@ backend/popDensity/query.osm
 backend/popDensity/maps/*
 backend/popDensity/pred_maps/*
 backend/water-contamination/maps/*
+frontend/flask/static/*/maps/*
+frontend/flask/static/*/pred_maps/*

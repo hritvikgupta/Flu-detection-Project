@@ -4,26 +4,116 @@
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
+    <script>
+      let data = {{ data | tojson |safe }}
+      function updateImage() {
+          let year = $( '#yearInput' ).val();
+          let month = $( '#monthInput' ).val()
+          let feat = $( '#features' ).val();
+          let opt1 = $( '#opt1' ).val();
+          let opt1s = data.feats[feat].feats[opt1]
+          if( opt1s ){
+            opt1s = opt1s.replaceAll( ' ', '-' )
+          }
+          console.log( feat, year, month, opt1s )
+          
+          if( feat == 'county' ){
+            opt1 = 'county'
+            month = '1'
+          }
+
+          let imagePath = `${data.feats[feat]['path']}/${month}-${year}-${opt1s}.png`;
+          $('#display p.error').hide()
+          $( '#heatmap' ).show()
+          document.getElementById('heatmap').src = imagePath;
+      }
+
+      $( document ).on( 'change', '#yearInput', function(e){
+          let year = $( this ).val();
+          $( '#yearSlider' ).val( year )
+          
+          updateImage()
+      } )
+
+      $( document ).on( 'change', '#yearSlider', function(e){
+        let year = $( this ).val();
+        $( '#yearInput' ).val( year )
+        
+        updateImage()
+    } )
+
+      $( document ).on( 'change', '#monthInput', function(e){
+        let x = $( this ).val();
+        $( '#monthSlider' ).val( x )
+        
+        updateImage()
+      } )
+
+      $( document ).on( 'change', '#monthSlider', function(e){
+        let x = $( this ).val();
+        $( '#monthInput' ).val( x )
+        updateImage()
+      } )
+
+      $( document ).on( 'change', '#features', function(e){
+        let feat = $( '#features' ).val()
+        console.log( feat )
+        if( feat != 'county' ){
+          let opt  = $( '#opt1')
+          let s = ''
+          for( let x in data.feats[feat].feats ){
+            s += `<option value="${x}">${data.feats[feat].feats[x]}</option>`
+          }
+          opt.html( s )
+        }
+        updateImage()
+      } )
+
+      $( document ).on( 'change', '#opt1', function(e){
+        updateImage()
+      } )
+
+      function syncInputWithSlider(sliderId, inputId) {
+          let slider = document.getElementById(sliderId);
+          let input = document.getElementById(inputId);
+          input.value = slider.value;
+          // updateSlider();*/
+      }
+      
+      window.onload = function() {
+          updateImage()
+      };
+      
+  </script>
 </head>
 <body>
   {{nav|safe}}
   <h1>Regional flu prediction for california by week</h1>
+
   <div>
       <label for="yearSlider">Year:</label>
-      <input type="range" id="yearSlider" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
-      <input type="number" id="yearInput" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
+      <input type="range" id="yearSlider" value="2010" min="2009" max="2022" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+      <input type="number" id="yearInput" value="2010" min="2009" max="2022" step="1" onchange="">
   </div>
-  <div>
-      <label for="weekSlider">Month:</label>
-      <input type="range" id="weekSlider" value="{{data.knownData.range[0][1]}}" min="1" max="12" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
-      <input type="number" id="weekInput" value="{{data.knownData.range[0][1]}}" min="1" max="12" step="1" onchange="updateSlider()">
+  <div id="monthWrapper">
+    <label for="monthSlider">Month:</label>
+    <input type="range" id="monthSlider" value="1" min="1" max="12" step="1" onchange="syncInputWithSlider('monthSlider', 'monthInput')">
+    <input type="number" id="monthInput" value="1" min="1" max="12" step="1" onchange="">
   </div>
   <div class='paddSelect'>
     <label for="features">Feature:</label>
-    <select id="features" onchange="updateSlider()">
-      for feat in data.water.feats
-        <option value="{ feat }">{ feat } </option>
-      endfor
+    <select id="features">
+      {% for feat in data.feats %}
+        <option value="{{ feat }}">{{  data['feats'][feat]['name'] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div id="opt1Wrapper">
+    <label for="opt1">Options:</label>
+    <select id="opt1">
+      {% for feat in data.feats.age.feats %}
+        <option value="{{ loop.index0 }}">{{  feat  }}</option>
+      {% endfor %}
     </select>
   </div>
   <div id="display">

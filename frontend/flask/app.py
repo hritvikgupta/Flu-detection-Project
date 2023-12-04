@@ -62,18 +62,31 @@ def waterFlu():
 
 @app.route( '/vaccines' )
 def vaccineStatic():
-    data = {
-        'knownData': {
-            'range' : [ [2001, 40], [2020, 39] ],
-            'path': "static/fluRegionMaps/maps/"
-        },
-        'predictions': {
-            'range' : [ [2020, 40], [2023, 30] ],
-            'path': "static/fluRegionMaps/pred_maps/"
+    features = {
+        'age' : ['Age Range 18-64 Years', 'Age Range 6 Months - 17 Years', 'Age Range 13-17 Years', 'Age Range 6 Months - 4 Years', 'Age Range 18-49 Years at High Risk', 'Age Range 50-64 Years', 'Age Range ≥18 Years', 'Age Range ≥6 Months', 'Age Range 18-64 Years at High Risk', 'Age Range 5-12 Years', 'Age Range 18-49 Years', 'Age Range ≥65 Years', 'Age Range 18-49 Years not at High Risk', 'Age Range 18-64 Years not at High Risk'],
+        're' : ['Hispanic', 'White, Non-Hispanic', 'American Indian or Alaska Native, Non-Hispanic', 'Black, Non-Hispanic', 'Other or Multiple Races, Non-Hispanic', 'Asian, Non-Hispanic']
+    }
+    d = {
+        'feats' : {
+            'age' : {
+                'feats' : features['age'],
+                'path' : 'static/vaccines/maps/age',
+                'name' : 'Age by State'
+            },
+            're' : {
+                'feats' : features['re'],
+                'path' : 'static/vaccines/maps/re',
+                'name' : 'Race & Ethnicity by State'
+            },
+            'county' : {
+                'path': 'static/vaccines/maps/county',
+                'name' : 'Yearly by County'
+            }
         }
     }
+    
     nav = render_template( 'nav.html' )
-    return render_template('vaccine.html', data=data, nav=nav, r=random.randint(1, 1000) )
+    return render_template('vaccine.html', data=d, nav=nav, r=random.randint(1, 1000) )
 
 @app.route('/')
 def index():
