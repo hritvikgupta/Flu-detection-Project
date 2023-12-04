@@ -13,22 +13,19 @@ def convertFilename( filename ):
     weekNumber = dateObj.isocalendar()[1]
 
     # Format the new filename
-    new_filename = f"{year}{weekNumber:02d}.png"
+    new_filename = f"{year}{weekNumber:02d}.csv"
     return new_filename
 
-# dir = 'static/fluRegionMaps/pred_maps/'
-dir = '../backend/flu_region/pred_by_dates'
+dir = 'pred_by_dates'
 l = set()
-print( os.listdir( dir ) )
-
 for filename in os.listdir( dir ):
     if filename.endswith( '.csv' ):
         newName = convertFilename( filename )
         if newName in l:
           print( f"{newName} already exists from {filename}" )
         l.add( newName )
-        # try:
-        #   os.rename( os.path.join( dir, filename ), os.path.join( dir, newName ) )
-        # except OSError as e:
-        #   print( e )
+        try:
+          os.rename( os.path.join( dir, filename ), os.path.join( dir, newName ) )
+        except OSError as e:
+          print( e )
         print( f"Renamed {filename} to {newName}" )

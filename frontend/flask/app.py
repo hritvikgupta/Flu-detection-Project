@@ -6,12 +6,22 @@ app = Flask(__name__, static_folder='static')
 # Define the folder where your images are stored
 IMAGE_FOLDER = os.path.join('static', 'flueRegionMaps')
 
-@app.route('/test')
+@app.route('/heatmap')
 def heatmap():
-    return render_template('heatmap.html' )
+    data = {
+        'knownData': {
+            'range' : [ [2001, 40], [2020, 39] ],
+            'path': "static/popDensity/maps/"
+        },
+        'predictions': {
+            'range' : [ [2020, 40], [2023, 30] ],
+            'path': "static/popDensity/pred_maps/"
+        }
+    }
+    return render_template('heatmap.html', data=data )
 
-@app.route('/')
-def index():
+@app.route( '/fluByRegion' )
+def fluByRegion():
     data = {
         'knownData': {
             'range' : [ [2001, 40], [2020, 39] ],
@@ -22,7 +32,13 @@ def index():
             'path': "static/fluRegionMaps/pred_maps/"
         }
     }
-    return render_template('index.html', data=data )
+    return render_template('fluByRegion.html', data=data )
+    
+    
+
+@app.route('/')
+def index():
+    return render_template('index.html' )
 
 
 

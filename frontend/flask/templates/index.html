@@ -3,74 +3,16 @@
 <head>
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function updateImage(year, week) {
-            let data = {{ data | tojson |safe }}
-            let weekFormatted = week.toString().padStart(2, '0');
-            let imagePath, isPredicting = false;
-
-            if( year > data.knownData.range[1][0] || ( year == data.knownData.range[1][0]&& week > data.knownData.range[1][1] ) ){
-              isPredicting = true;
-              imagePath = data.predictions.path + year + weekFormatted + '.png';
-            } else {
-              imagePath = data.knownData.path + year + weekFormatted + '.png';
-            }
-            
-            //console.log( year, week  )
-            if(  
-              ( year == data.knownData.range[0][0] && week < data.knownData.range[0][1] ) ||
-              ( year >= data.predictions.range[1][0] && week > data.predictions.range[1][1] ) 
-            ){
-              $( '#display p.error').text( 'No Data for that time' ).show()
-              $( '#heatmap' ).hide()
-              $('#display p.datatype').hide()
-              return
-            }
-            $('#display p.datatype').show()
-            $('#display p.datatype').text( isPredicting ? 'Prediction Data' : 'Actual Data')
-            $('#display p.error').hide()
-            $( '#heatmap' ).show()
-            document.getElementById('heatmap').src = imagePath;
-        }
-
-        function updateSlider() {
-            let year = document.getElementById('yearInput').value;
-            let week = document.getElementById('weekInput').value;
-            document.getElementById('yearSlider').value = year;
-            document.getElementById('weekSlider').value = week;
-            updateImage(year, week);
-        }
-
-        function syncInputWithSlider(sliderId, inputId) {
-            let slider = document.getElementById(sliderId);
-            let input = document.getElementById(inputId);
-            input.value = slider.value;
-            updateSlider();
-        }
-
-        window.onload = function() {
-            syncInputWithSlider('yearSlider', 'yearInput');
-            syncInputWithSlider('weekSlider', 'weekInput');
-        };
-    </script>
+    <link href="{{ url_for('static', filename='css/ui.css') }}" rel="stylesheet"></link>
 </head>
 <body>
-    <h1>Regional flu prediction for california by week</h1>
-    {{ data }}
+    <h1>Team: Data Flu-encers</h1>
     <div>
-        <label for="yearSlider">Year:</label>
-        <input type="range" id="yearSlider" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
-        <input type="number" id="yearInput" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
-    </div>
-    <div>
-        <label for="weekSlider">Week:</label>
-        <input type="range" id="weekSlider" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
-        <input type="number" id="weekInput" min="1" max="52" step="1" onchange="updateSlider()">
-    </div>
-    <div id="display">
-      <p class="error"></p>
-      <p class="datatype"></p>
-      <img id="heatmap" width="700" src="" alt="Heatmap">
+      <ul>
+        <li><a href="fluByRegion">Simple flu by region</a></li>
+        <li><a href="heatmap">Simple flu by region with population density heatmap</a></li>
+        
+      </ul>
     </div>
 </body>
 </html>
