@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predictive Flu Mapping</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
+</head>
+<body>
+  {{nav|safe}}
+  <h1>Regional flu prediction for california by week</h1>
+  <div>
+      <label for="yearSlider">Year:</label>
+      <input type="range" id="yearSlider" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+      <input type="number" id="yearInput" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
+  </div>
+  <div>
+      <label for="weekSlider">Month:</label>
+      <input type="range" id="weekSlider" value="{{data.knownData.range[0][1]}}" min="1" max="12" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
+      <input type="number" id="weekInput" value="{{data.knownData.range[0][1]}}" min="1" max="12" step="1" onchange="updateSlider()">
+  </div>
+  <div class='paddSelect'>
+    <label for="features">Feature:</label>
+    <select id="features" onchange="updateSlider()">
+      for feat in data.water.feats
+        <option value="{ feat }">{ feat } </option>
+      endfor
+    </select>
+  </div>
+  <div id="display">
+    <p class="error"></p>
+    <p class="datatype"></p>
+    <img id="heatmap" width="700" src="" alt="Heatmap">
+  </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predictive Flu Mapping</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
+    <script>
+      let data = {{ data | tojson |safe }}
+      function updateImage(year, week) {
+        
+        let weekFormatted = week.toString().padStart(2, '0');
+        let imagePath, isPredicting = false;
+
+        if( year > data.flu.knownData.range[1][0] || ( year == data.flu.knownData.range[1][0]&& week > data.flu.knownData.range[1][1] ) ){
+          isPredicting = true;
+          imagePath = data.flu.predictions.path + year + weekFormatted + '.png';
+        } else {
+          imagePath = data.flu.knownData.path + year + weekFormatted + '.png';
+        }
+        
+        //console.log( year, week  )
+        if(  
+          ( year == data.flu.knownData.range[0][0] && week < data.flu.knownData.range[0][1] ) ||
+          ( year >= data.flu.predictions.range[1][0] && week > data.flu.predictions.range[1][1] ) 
+        ){
+          $( '#display p.error').text( 'No Data for that time' ).show()
+          $( '#heatmap' ).hide()
+          $('#display p.datatype').hide()
+          return
+        }
+        $('#display p.datatype').show()
+        $('#display p.datatype').text( isPredicting ? 'Predicted Data' : 'Actual Data')
+        $('#display p.error').hide()
+        $( '#heatmap' ).show()
+        $( '#heatmap' ).attr( 'src', imagePath );
+      }
+
+      /**
+      the water side of the code dont mess that up MICHAEL
+      */
+      function updateWater( year, feat ){
+        let imagePath = data.water.path + feat + "/" + year + ".png";
+        $( '#rightheatmap' ).attr( 'src', imagePath );
+      }
+
+      function updateSlider() {
+          let year = $( '#yearInput' ).val();
+          let week = $( '#weekInput' ).val();
+          let waterYear = $( '#waterYearInput' ).val();
+          let feat = $( '#features' ).val()
+          
+          $( '#yearInput').val( year );
+          $( '#weekInput' ).val( week );
+          $( '#waterYearInput' ).val( waterYear );
+          updateImage( year, week );
+          updateWater( waterYear, feat );
+      }
+
+      function syncInputWithSlider(sliderId, inputId) {
+          let slider = document.getElementById(sliderId);
+          let input = document.getElementById(inputId);
+          input.value = slider.value;
+          updateSlider();
+      }
+
+      window.onload = function() {
+          syncInputWithSlider('yearSlider', 'yearInput');
+          syncInputWithSlider('weekSlider', 'weekInput');
+          syncInputWithSlider('waterYearSlider', 'waterYearInput');
+      };
+    </script>
+</head>
+<body>
+  {{nav|safe}}
+  <h1>Water contamination corelation with flu by region</h1>
+  <div class="grid">
+    <div class="left">
+      <div>
+          <label for="yearSlider">Year:</label>
+          <input type="range" id="yearSlider" value="{{data.flu.knownData.range[0][0]}}" min="{{data.flu.knownData.range[0][0]}}" max="{{data.flu.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+          <input type="number" id="yearInput" value="{{data.flu.knownData.range[0][0]}}" min="{{data.flu.knownData.range[0][0]}}" max="{{data.flu.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
+      </div>
+      <div>
+          <label for="weekSlider">Week:</label>
+          <input type="range" id="weekSlider" value="{{data.flu.knownData.range[0][1]}}" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
+          <input type="number" id="weekInput" value="{{data.flu.knownData.range[0][1]}}" min="1" max="52" step="1" onchange="updateSlider()">
+      </div>
+      <div id="display">
+        <p class="error"></p>
+        <p class="datatype"></p>
+        <img id="heatmap" width="700" src="" alt="Heatmap">
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <label for="waterYearSlider">Year:</label>
+        <input type="range" value="{{data.water.limits[0]}}" min="{{data.water.limits[0]}}" max="2023" step="1" id="waterYearSlider" onchange="syncInputWithSlider('waterYearSlider', 'waterYearInput')">
+        <input type="number" value="{{data.water.limits[0]}}" min="{{data.water.limits[0]}}" max="2023" step="1" id="waterYearInput" onchange="updateSlider()">
+      </div>
+      <div class='paddSelect'>
+        <label for="features">Feature:</label>
+        <select id="features" onchange="updateSlider()">
+          {% for feat in data.water.feats %}
+            <option value="{{ feat }}">{{ feat }} </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div id="rightdisplay">
+        <p class="error"></p>
+        <p class="datatype"></p>
+        <img id="rightheatmap" width="700" src="" alt="Heatmap">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

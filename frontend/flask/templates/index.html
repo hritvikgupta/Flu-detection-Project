@@ -3,15 +3,16 @@
 <head>
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="{{ url_for('static', filename='css/ui.css') }}" rel="stylesheet"></link>
+    <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
 </head>
 <body>
+    {{nav|safe}}
     <h1>Team: Data Flu-encers</h1>
     <div>
       <ul>
         <li><a href="fluByRegion">Simple flu by region</a></li>
         <li><a href="heatmap">Simple flu by region with population density heatmap</a></li>
-        
+        <li><a href="heatmap">Water contamination corelation with flu by region</a></li>
       </ul>
     </div>
 </body>

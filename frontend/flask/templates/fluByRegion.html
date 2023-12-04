@@ -3,7 +3,7 @@
 <head>
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="{{ url_for('static', filename='css/ui.css') }}" rel="stylesheet"></link>
+    <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
     <script>
         function updateImage(year, week) {
             let data = {{ data | tojson |safe }}
@@ -56,16 +56,17 @@
     </script>
 </head>
 <body>
+    {{nav|safe}}
     <h1>Regional flu prediction for california by week</h1>
     <div>
         <label for="yearSlider">Year:</label>
-        <input type="range" id="yearSlider" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
-        <input type="number" id="yearInput" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
+        <input type="range" id="yearSlider" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+        <input type="number" id="yearInput" value="{{data.knownData.range[0][0]}}" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
     </div>
     <div>
         <label for="weekSlider">Week:</label>
-        <input type="range" id="weekSlider" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
-        <input type="number" id="weekInput" min="1" max="52" step="1" onchange="updateSlider()">
+        <input type="range" id="weekSlider" value="{{data.knownData.range[0][1]}}" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
+        <input type="number" id="weekInput" value="{{data.knownData.range[0][1]}}" min="1" max="52" step="1" onchange="updateSlider()">
     </div>
     <div id="display">
       <p class="error"></p>

@@ -54,7 +54,7 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
   height: 20px;
-  background: #007bff;
+  background: #003da5;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -67,8 +67,47 @@ input[type="number"] {
   text-align: center;
 }
 
+div.paddSelect{
+  padding: 19px
+}
+
 img#heatmap {
   display: block;
   margin: 20px auto;
   max-width: 100%;
+}
+
+header {
+  background-color: #003da5;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.navbar {
+  max-width: 800px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  color: #ffb81c;
+}
+
+div.grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; /* Adjust the gap as needed */
+  justify-content: center;
+}
+.left {
+  grid-column: 1;
+}
+
+.right {
+  grid-column: 2;
 }
