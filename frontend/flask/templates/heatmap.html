@@ -3,7 +3,7 @@
 <head>
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="{{ url_for('static', filename='css/ui.css') }}" rel="stylesheet"></link>
+    <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
     <script>
         function updateImage(year, week) {
             let data = {{ data | tojson |safe }}
@@ -56,6 +56,7 @@
     </script>
 </head>
 <body>
+    {{nav|safe}}
     <h1>Team: Data Flu-encers</h1>
     <div>
         <label for="yearSlider">Year:</label>
