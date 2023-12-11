@@ -40,6 +40,15 @@
       */
       function updateWater( year, feat ){
         let imagePath = data.water.path + feat + "/" + year + ".png";
+        let img = new Image()
+          
+        img.src = imagePath;
+        img.onerror = function(){
+          $('#rightheatmap').hide()
+          $('#rightdisplay p.error').show().text( 'No Data for those parameters ')
+        }
+        $( '#rightdisplay p.error' ).hide()
+        $( '#rightheatmap' ).show()
         $( '#rightheatmap' ).attr( 'src', imagePath );
       }
 

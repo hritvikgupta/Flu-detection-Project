@@ -76,11 +76,13 @@ def vaccineStatic():
             're' : {
                 'feats' : features['re'],
                 'path' : 'static/vaccines/maps/re',
-                'name' : 'Race & Ethnicity by State'
+                'name' : 'Race & Ethnicity by State',
+                'limit': []
             },
             'county' : {
                 'path': 'static/vaccines/maps/county',
-                'name' : 'Yearly by County'
+                'name' : 'Yearly by County',
+                'limit': [2018,2021]
             }
         }
     }
