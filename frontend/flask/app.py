@@ -2,6 +2,20 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 import random
 
+if not os.path.exists( 'static/fluRegionMaps' ):
+    os.makedirs( 'static/fluRegionMaps/maps' )
+    os.makedirs( 'static/fluRegionMaps/pred_maps' )
+if not os.path.exists( 'static/popDensity' ):
+    os.makedirs( 'static/popDensity/maps' )
+    os.makedirs( 'static/popDensity/pred_maps' )
+if not os.path.exists( 'static/vaccines' ):
+    os.makedirs( 'static/vaccines/c_maps' )
+    os.makedirs( 'static/vaccines/maps' )
+if not os.path.exists( 'static/water' ):
+    x = ['AirTemperature', 'Algae_Description', 'All', 'BottomChlorophyll_Fluorescence', 'BottompH', 'BottomTurbidity', 'BottomWater_Depth_at_Station', 'Bottom_DissolvedOxygen', 'Bottom_SpecificConductance', 'Bottom_WaterTemperature', 'Carbon_Dioxide', 'Chlorophyll_Fluorescence', 'Chlorophyll_Volume', 'CROP', 'Crop_Height', 'Crop_Height_Range', 'Density', 'Discharge', 'DissolvedOxygen', 'ElectricalConductance', 'Field_Notes', 'Field_Status', 'Flow,_channel', 'Flow,_pipe', 'Foam_Description', 'Gauge_Height', 'InflowMeter_Reading', 'Irrigation_Status', 'Meter_Reading', 'Microcystis_aeruginosa', 'NorthLatitude', 'Odor_Description', 'OutflowMeter_Reading', 'Percent_Cloud_Cover', 'pH', 'pH_w_time', 'Redox_Potential', 'Reference_Point_to_Water_Surface_RPTOWS', 'Secchi_Depth', 'SoilRedox_Potential', 'SpecificConductance', 'SpecificConductance_EC_w_time', 'Specific_Gravity', 'Tide_Time', 'Turbidity', 'Turbidity_Description', 'Turbidity_w_time', 'WaterColor_Description', 'WaterTemperature', 'WaterTemperature_w_time', 'Water_Depth_at_Station', 'Weather_Observations', 'WestLongitude', 'Wind_Direction', 'Wind_Velocity', 'Wind_Velocity_and_Direction', 'Wind_Velocity_Range']
+    for i in x:
+        os.makedirs( f'static/water/{i}')
+
 app = Flask(__name__, static_folder='static')
 
 # Define the folder where your images are stored
@@ -100,4 +114,6 @@ def index():
 if __name__ == '__main__':
     # app.run(debug=True)
     app.run(debug=True, port=5000)
+    
+    
     
