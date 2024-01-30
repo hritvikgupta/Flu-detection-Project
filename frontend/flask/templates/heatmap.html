@@ -16,7 +16,7 @@
             } else {
               imagePath = data.knownData.path + year + weekFormatted + '.html';
             }
-            
+            console.log(imagePath)
             //console.log( year, week  )
             if(  
               ( year == data.knownData.range[0][0] && week < data.knownData.range[0][1] ) ||
@@ -56,22 +56,26 @@
     </script>
 </head>
 <body>
-    {{nav|safe}}
-    <h1>Team: Data Flu-encers</h1>
-    <div>
-        <label for="yearSlider">Year:</label>
-        <input type="range" id="yearSlider" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
-        <input type="number" id="yearInput" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
-    </div>
-    <div>
-        <label for="weekSlider">Week:</label>
-        <input type="range" id="weekSlider" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
-        <input type="number" id="weekInput" min="1" max="52" step="1" onchange="updateSlider()">
-    </div>
-    <div id="display">
-      <p class="error"></p>
-      <p class="datatype"></p>
-      <iframe id="heatmap" width="100%" height="800" src="static/popDensity/maps/200140.html"></iframe>
-    </div>
+  {{nav|safe}}
+  <div class="container">
+      <h1>Team: Data Flu-encers</h1>
+      <div class="slider-group">
+          <div class="input-group">
+              <label for="yearSlider">Year:</label>
+              <input type="range" id="yearSlider" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+              <input type="number" id="yearInput" min="{{data.knownData.range[0][0]}}" max="{{data.predictions.range[1][0]}}" step="1" onchange="updateSlider()">
+          </div>
+          <div class="input-group">
+              <label for="weekSlider">Week:</label>
+              <input type="range" id="weekSlider" min="1" max="52" step="1" onchange="syncInputWithSlider('weekSlider', 'weekInput')">
+              <input type="number" id="weekInput" min="1" max="52" step="1" onchange="updateSlider()">
+          </div>
+      </div>
+      <div id="display">
+          <p class="error"></p>
+          <p class="datatype"></p>
+          <iframe id="heatmap" src="static/popDensity/maps/200140.html"></iframe>
+      </div>
+  </div>
 </body>
 </html>

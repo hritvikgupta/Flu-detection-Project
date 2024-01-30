@@ -25,6 +25,7 @@
           }
 
           let imagePath = `${data.feats[feat]['path']}/${month}-${year}-${opt1s}.png`;
+          console.log("image" + imagePath)
           let img = new Image()
           
           img.src = imagePath;
@@ -103,38 +104,41 @@
 </head>
 <body>
   {{nav|safe}}
-  <h1>Nation-Wide Flu Vaccine data</h1>
-
-  <div>
-      <label for="yearSlider">Year:</label>
-      <input type="range" id="yearSlider" value="2010" min="2009" max="2022" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
-      <input type="number" id="yearInput" value="2010" min="2009" max="2022" step="1" onchange="">
-  </div>
-  <div id="monthWrapper">
-    <label for="monthSlider">Month:</label>
-    <input type="range" id="monthSlider" value="1" min="1" max="12" step="1" onchange="syncInputWithSlider('monthSlider', 'monthInput')">
-    <input type="number" id="monthInput" value="1" min="1" max="12" step="1" onchange="">
-  </div>
-  <div class='paddSelect'>
-    <label for="features">Feature:</label>
-    <select id="features">
-      {% for feat in data.feats %}
-        <option value="{{ feat }}">{{  data['feats'][feat]['name'] }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div id="opt1Wrapper">
-    <label for="opt1">Options:</label>
-    <select id="opt1">
-      {% for feat in data.feats.age.feats %}
-        <option value="{{ loop.index0 }}">{{  feat  }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div id="display">
-    <p class="error"></p>
-    <p class="datatype"></p>
-    <img id="heatmap" width="900" src="" alt="Heatmap">
+  <div class="container">
+      <h1>Nation-Wide Flu Vaccine Data</h1>
+      <div class="slider-group">
+          <div class="input-group">
+              <label for="yearSlider">Year:</label>
+              <input type="range" id="yearSlider" value="2010" min="2009" max="2022" step="1" onchange="syncInputWithSlider('yearSlider', 'yearInput')">
+              <input type="number" id="yearInput" value="2010" min="2009" max="2022" step="1" onchange="updateImage()">
+          </div>
+          <div id="monthWrapper" class="input-group">
+              <label for="monthSlider">Month:</label>
+              <input type="range" id="monthSlider" value="1" min="1" max="12" step="1" onchange="syncInputWithSlider('monthSlider', 'monthInput')">
+              <input type="number" id="monthInput" value="1" min="1" max="12" step="1" onchange="updateImage()">
+          </div>
+      </div>
+      <div class='paddSelect input-group'>
+          <label for="features">Feature:</label>
+          <select id="features" onchange="updateImage()">
+              {% for feat in data.feats %}
+                  <option value="{{ feat }}">{{ data['feats'][feat]['name'] }}</option>
+              {% endfor %}
+          </select>
+      </div>
+      <div id="opt1Wrapper" class='input-group'>
+          <label for="opt1">Options:</label>
+          <select id="opt1" onchange="updateImage()">
+              {% for feat in data.feats.age.feats %}
+                  <option value="{{ loop.index0 }}">{{ feat }}</option>
+              {% endfor %}
+          </select>
+      </div>
+      <div id="display">
+          <p class="error"></p>
+          <p class="datatype"></p>
+          <img id="heatmap" src="" alt="Heatmap">
+      </div>
   </div>
 </body>
 </html>
