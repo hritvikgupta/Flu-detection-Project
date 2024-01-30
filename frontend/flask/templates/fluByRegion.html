@@ -4,9 +4,10 @@
     <title>Predictive Flu Mapping</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="{{ url_for('static', filename='css/ui.css') }}?{{r}}" rel="stylesheet"></link>
-    <script>
+    <script> 
+        var data = { data , tojson , safe }
         function updateImage(year, week) {
-            let data = {{ data | tojson |safe }}
+       
             let weekFormatted = week.toString().padStart(2, '0');
             let imagePath, isPredicting = false;
 
