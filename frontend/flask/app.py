@@ -25,6 +25,7 @@ if not os.path.exists( 'static/water' ):
 
 app = Flask(__name__, static_folder='static')
 
+
 # Define the folder where your images are stored
 IMAGE_FOLDER = os.path.join('static', 'flueRegionMaps')
 
